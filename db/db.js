@@ -45,20 +45,37 @@ var Roles = sequelize.define('roles', {
 });
 Movies.belongsToMany(Actors, {through: Roles, foreignKey: 'movie_id'});
 Actors.belongsToMany(Movies, {through: Roles, foreignKey: 'actor_id'});
+Movies.hasMany(Roles, {foreignKey: 'movie_id'});
+Actors.hasMany(Roles, {foreignKey: 'actor_id'});
 
+var models = {Actors, Roles, Movies};
 
-function findActorMovies(id, fn){
-  Actors.findById(id, {include: [Movies]}).then(function(data){
-    if (data.movies)
-      fn(data.movies);
+function getOtherModels(model){
+  return Object.keys(models).filter(i=>i!=model).map(i=>models[i]);
+}
+
+function findById(model, id, fn){
+  models[model].findById(id, {include: getOtherModels(model)}).then(function(data){
+    if (data)
+      return fn(null,data);
+    fn("Id " + id + " not found in " + model);
   });
 }
-function findMovieActors(id, fn){
-  Movies.findById(id, {include: [Actors]}).then(function(data){
-    if (data.actors)
-      fn(data.actors);
+
+function findByAttr(model, obj, fn){
+  models[model].findAll({
+    where: obj,
+    include: getOtherModels(model)
+  })
+  .then(function(data){
+    if (data)
+      return fn(null,data);
+    fn("Attribute not found in " + model);
   });
 }
-findActorMovies(376249, function(data){
-  console.log(data[10].name);
-});
+
+module.exports = {findByAttr, findById, models};
+
+// findById('Actors', 347256, function(err,data){
+//   console.log(err || data.roles[0].role);
+// })
