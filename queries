@@ -1,0 +1,46 @@
+select first_name, count(first_name) as count from actors
+group by first_name
+order by count desc
+limit 10
+
+//Prolific
+select a.first_name, a.last_name, count(*) as role_count  from actors a
+inner join roles r
+on r.actor_id = a.id
+group by first_name, last_name
+order by role_count desc
+limit 100
+
+//WIP
+select a.first_name, a.last_name, m.name, mj.n_roles  from movies m
+join roles r on m.id = r.movie_id
+join actors a on a.id = r.actor_id
+join
+
+(select count(distinct r.role) n_roles, m.id from roles r
+join movies m on m.id = r.movie_id
+group by m.id
+limit 1000) mj
+
+on mj.id = m.id
+
+//WIP
+select m.name,  females.f_cnt, males.m_cnt from movies m
+left outer join
+(select m.name, m.id, count(a.id) f_cnt from movies m
+join roles r on r.movie_id = m.id
+join actors a on a.id = r.actor_id
+where a.gender = 'F'
+group by m.id) females
+
+on females.id = m.id
+
+left outer join
+(select m.name, m.id, count(a.id) m_cnt from movies m
+join roles r on r.movie_id = m.id
+join actors a on a.id = r.actor_id
+where a.gender = 'M'
+group by m.id) males
+
+on males.id = m.id
+where  males.m_cnt = 0 
