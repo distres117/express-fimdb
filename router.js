@@ -2,7 +2,7 @@ var router = require('express').Router();
 var db = require('./db/db.js');
 
 router.param('type', function(req,res,next,type){
-  if (db.models[type]){
+  if (db.exists(type)){
     req.type = type;
     next();
   }
@@ -15,7 +15,8 @@ router.get('/error', function(req,res){
 });
 
 router.get('/:type', function(req,res){
-  res.send("You got:" + req.type);
+  var type = req.type.toLowerCase();
+  res.render(type, {selected: type });
 });
 
 

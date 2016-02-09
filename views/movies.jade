@@ -1,0 +1,24 @@
+extends layout
+block content
+  .panel.panel-primary
+    .panel-heading Search Movies by...
+    .panel-body.target
+      form(role='form')
+        .form-group
+          label(for='movie_name') Movie Name
+          input#movie_name.form-control(type='text')
+        .form-group.form-inline
+          label(for='actor_first_name') Actor's First Name
+          input#actor_first_name.form-control(type='text')
+          label(for='actor_last_name') Actor's Last Name
+          input#actor_last_name.form-control(type='text')
+        .form-group.form-inline
+          label(for='movie_year') Movie Year
+          select#movie_year.form-control
+            option 1
+            option 2
+          label(for='movie_genre') Movie Genre
+          select#movie_genre.form-control
+            option 1
+            option 2
+        button.btn.btn-default.pull-right(type='submit') Submit

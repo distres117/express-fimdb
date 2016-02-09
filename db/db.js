@@ -73,8 +73,11 @@ function findByAttr(model, obj, fn){
     fn("Attribute not found in " + model);
   });
 }
+function exists(name){
+  return !!models[name];
+}
 
-module.exports = {findByAttr, findById, models};
+module.exports = {findByAttr, findById, exists};
 
 // findById('Actors', 347256, function(err,data){
 //   console.log(err || data.roles[0].role);

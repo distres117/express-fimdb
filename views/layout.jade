@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    link(rel="stylesheet", href="bootstrap/dist/css/bootstrap.css")
+  body
+    .navbar.navbar-default
+      .navbar-header
+        a.navbar-brand(href='#') FIMDB
+      ul.nav.navbar-nav
+        li(class=(selected === "movies" ? "active" : ""))
+          a(href='/Movies') Movies
+        li(class=(selected === "actors" ? "active" : ""))
+          a(href='/Actors') Actors
+        li(class=(selected === "movies" ? "roles" : ""))
+          a(href='/Roles') Roles
+        li
+          a(href='#') Favorites
+    .container
+      block content
+      
