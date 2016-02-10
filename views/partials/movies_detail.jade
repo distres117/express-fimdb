@@ -1,0 +1,16 @@
+panel.panel-primary
+  .panel-heading Cast
+  .panel-body.target
+    table(class='table table-hover')
+      th Role
+      th Actor
+      tbody
+        each actor in data.actors
+          tr
+            td
+              = actor.roles.role
+            td
+              a(href='/Actors/#{actor.id}')= actor.last_name + ", " + actor.first_name
+            td
+        
+      

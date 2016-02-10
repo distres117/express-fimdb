@@ -43,15 +43,37 @@ var Roles = sequelize.define('roles', {
   movie_id: Sequelize.INTEGER,
   role: Sequelize.STRING
 });
+
+var Genres = sequelize.define('movies_genres', {
+  movie_id:{
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  genre: Sequelize.STRING
+})
 Movies.belongsToMany(Actors, {through: Roles, foreignKey: 'movie_id'});
 Actors.belongsToMany(Movies, {through: Roles, foreignKey: 'actor_id'});
 Movies.hasMany(Roles, {foreignKey: 'movie_id'});
 Actors.hasMany(Roles, {foreignKey: 'actor_id'});
+Movies.hasOne(Genres, {foreignKey: 'movie_id'});
 
-var models = {Actors: Actors, Roles: Roles, Movies: Movies};
+
+var models = {Actors, Movies, Genres};
 
 function getOtherModels(model){
-  return Object.keys(models).filter(i=>i!=model).map(i=>models[i]);
+  var rtn = Object.keys(models).filter(i=>i!=model).map(i=>models[i]);
+  if (model === 'Actors')
+    rtn.splice(rtn.indexOf(Genres, 1));
+  return rtn;
+}
+
+function sanitize(obj){
+  var keys = Object.keys(obj);
+  keys.forEach(function(item){
+    if (!obj[item])
+      delete obj[item];
+  });
+  return obj;
 }
 
 
@@ -65,11 +87,12 @@ function findById(model, id, fn){
 
 function findByAttr(model, obj, fn){
   models[model].findAll({
-    where: obj,
-    include: getOtherModels(model)
+    where: sanitize(obj),
+    include: getOtherModels(model),
+    limit: 100
   })
   .then(function(data){
-    if (data)
+    if (data && data.length)
       return fn(null,data);
     fn("Attribute not found in " + model);
   });
@@ -78,8 +101,14 @@ function exists(name){
   return !!models[name];
 }
 
-module.exports = {findByAttr, findById, exists};
+var temp;
+module.exports = {findByAttr, findById, exists, temp};
 
+//console.log(getOtherModels('Movies'));
 // findById('Actors', 347256, function(err,data){
-//   console.log(err || data.roles[0].role);
-// })
+//   console.log(err || data);
+// });
+
+// findByAttr('Movies', {name: 'Braveheart'}, function(err,data){
+//   console.log(data[0].movies_genre.genre);
+// } );
