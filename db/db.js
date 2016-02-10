@@ -5,7 +5,7 @@ var Sequelize = require('sequelize'),
       freezeTableName:true,
       timestamps: false
     },
-    storage: './imdb-large.sqlite3.db'
+    storage: './db/imdb-large.sqlite3.db'
   });
 
 //Movie model
@@ -48,11 +48,12 @@ Actors.belongsToMany(Movies, {through: Roles, foreignKey: 'actor_id'});
 Movies.hasMany(Roles, {foreignKey: 'movie_id'});
 Actors.hasMany(Roles, {foreignKey: 'actor_id'});
 
-var models = {Actors, Roles, Movies};
+var models = {Actors: Actors, Roles: Roles, Movies: Movies};
 
 function getOtherModels(model){
   return Object.keys(models).filter(i=>i!=model).map(i=>models[i]);
 }
+
 
 function findById(model, id, fn){
   models[model].findById(id, {include: getOtherModels(model)}).then(function(data){

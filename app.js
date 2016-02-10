@@ -4,7 +4,7 @@ var express = require('express'),
   router = require('./router');
 
 app.set('view engine', 'jade');
-app.set('views', __dirname + '/views')
+app.set('views', __dirname + '/views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(function(req,res,next){

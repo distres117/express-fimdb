@@ -3,10 +3,10 @@ block content
   .panel.panel-primary
     .panel-heading Search Movies by...
     .panel-body.target
-      form(role='form')
+      form(role='form', method='POST', action='/Movies')
         .form-group
           label(for='movie_name') Movie Name
-          input#movie_name.form-control(type='text')
+          input#movie_name.form-control(type='text', name='name')
         .form-group.form-inline
           label(for='actor_first_name') Actor's First Name
           input#actor_first_name.form-control(type='text')

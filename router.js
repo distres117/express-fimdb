@@ -10,14 +10,25 @@ router.param('type', function(req,res,next,type){
     res.redirect('/error');
 
 });
+
+router.get('/', function(req,res){
+  res.redirect('/Movies');
+});
 router.get('/error', function(req,res){
   res.status(404).send("Page not found");
 });
 
-router.get('/:type', function(req,res){
-  var type = req.type.toLowerCase();
-  res.render(type, {selected: type });
-});
+router.route('/:type')
+  .get(function(req,res){
+    var type = req.type.toLowerCase();
+    res.render(type, {selected: type });
+  })
+  .post(function(req,res){
+    db.findByAttr(req.type, req.body, function(err,data){
+      if (data)
+        res.json(data);
+    });
+  })
 
 
 module.exports = router;
