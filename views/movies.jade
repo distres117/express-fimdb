@@ -6,11 +6,12 @@ block content
       form(role='form', method='POST', action='/Movies')
         .form-group
           label(for='movie_name') Movie Name
-          input#movie_name.form-control(type='text', name='name')
+          input#movie_name.form-control(type='text', name='name', value=(data ? data.name : ''))
         .form-group.form-inline
           label(for='movie_year') Movie Year
           select#movie_year.form-control(name='year')
-            option
+            option 
+              =(data ? data.year : "")
             - var i = 1888
             -while (i <= 2008)
                 option 
@@ -18,24 +19,25 @@ block content
         button.btn.btn-default.pull-right(type='submit') Submit
   if showResults
     .col-md-6
-      .panel.panel-primary
-        .panel-heading Results
-        .panel-body.target
-          table(class='table table-hover')
-            th Title
-            th Year
-            th Genre
-            th Rank
-            tbody
-              each movie, index in data
-                tr(class=(movie.id === id ? "info": ""))
-                  td
-                    a(href='/Movies/#{movie.id}')= movie.name
-                  td
-                    = movie.year
-                  td 
-                    = movie.movies_genres ? movie.movies_genre.genre : ""
-                  td
-                    = movie.rank
+      if data.length > 0
+        .panel.panel-primary
+          .panel-heading Results
+          .panel-body.target
+            table(class='table table-hover')
+              th Title
+              th Year
+              th Genre
+              th Rank
+              tbody
+                each movie, index in data
+                  tr(class=(movie.id === id ? "info": ""))
+                    td
+                      a(href='/Movies/#{movie.id}')= movie.name
+                    td
+                      = movie.year
+                    td 
+                      = movie.movies_genres ? movie.movies_genre.genre : ""
+                    td
+                      = movie.rank
     .col-md-6
       !=template

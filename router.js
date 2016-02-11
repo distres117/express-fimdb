@@ -34,22 +34,24 @@ router.route('/:type')
     });
   });
 
-router.get('/Movies/:id', function(req,res){
-  db.findById('Movies', req.params.id, function(err,data){
+router.get('/:type/:id', function(req,res){
+  db.findById(req.type, req.params.id, function(err,data){
     if (!err)
-      res.render('partials/movies_detail', {data: data}, function(err,html){
-        res.render('movies', {template: html, data: db.temp, showResults:true, id: Number(req.params.id)});
+      res.render('partials/'+ req.type.toLowerCase() + '_detail', {data: data}, function(err,html){
+        if (req.query.link)
+          db.temp = data;
+        res.render(req.type.toLowerCase(), {template: html, data: db.temp, showResults:true, id: Number(req.params.id)});
       });
   });
 
 });
 
-router.get('/Actors/:id', function(req,res){
-  db.findById('Actors', req.params.id, function(err,data){
-    if (!err)
-      res.render('actors', {data: data, showResults:true} );
-  });
-});
+// router.get('/Actors/:id', function(req,res){
+//   db.findById('Actors', req.params.id, function(err,data){
+//     if (!err)
+//       res.render('actors', {data: data, showResults:true} );
+//   });
+// });
 
 
 

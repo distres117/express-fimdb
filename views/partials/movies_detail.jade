@@ -10,7 +10,7 @@ panel.panel-primary
             td
               = actor.roles.role
             td
-              a(href='/Actors/#{actor.id}')= actor.last_name + ", " + actor.first_name
+              a(href='/Actors/#{actor.id}?link=true')= actor.last_name + ", " + actor.first_name
             td
         
       

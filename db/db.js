@@ -1,3 +1,4 @@
+var temp;
 var Sequelize = require('sequelize'),
   sequelize = new Sequelize('database', null, null, {
     dialect: 'sqlite',
@@ -79,8 +80,9 @@ function sanitize(obj){
 
 function findById(model, id, fn){
   models[model].findById(id, {include: getOtherModels(model)}).then(function(data){
-    if (data)
+    if (data){
       return fn(null,data);
+    }
     fn("Id " + id + " not found in " + model);
   });
 }
@@ -101,7 +103,7 @@ function exists(name){
   return !!models[name];
 }
 
-var temp;
+
 module.exports = {findByAttr, findById, exists, temp};
 
 //console.log(getOtherModels('Movies'));

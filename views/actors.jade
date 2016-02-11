@@ -3,30 +3,28 @@ block content
   .panel.panel-primary
     .panel-heading Search Actors by...
     .panel-body.target
-      form(role='form')
+      form(role='form', method="POST", action='/Actors')
         .form-group.form-inline
           label(for='actor_first_name') Actor's First Name
-          input#actor_first_name.form-control(type='text', value=(data ? data.first_name : ""))
+          input#actor_first_name.form-control(type='text', name='first_name', value=(data ? data.first_name : ""))
           label(for='actor_last_name') Actor's Last Name
-          input#actor_last_name.form-control(type='text', value=(data ? data.last_name : ""))
+          input#actor_last_name.form-control(type='text', name='last_name', value=(data ? data.last_name : ""))
         button.btn.btn-default.pull-right(type='submit') Submit
   if showResults
     .col-md-6
-      .panel.panel-primary
-        .panel-heading Results
-        .panel-body.target
-          table(class='table table-hover')
-            th Title
-            th Year
-            th Rank
-            tbody
-              each movie, index in data.movies
-                tr
-                  td
-                    a(href='/Movies/#{movie.id}')= movie.name
-                  td
-                    = movie.year
-                  td
-                    = movie.rank
+      if data.length > 1
+        .panel.panel-primary
+          .panel-heading Results
+          .panel-body.target
+            table(class='table table-hover')
+              th Name
+              th Gender
+              tbody
+                each actor, index in data
+                  tr(class=(actor.id === id ? "info": ""))
+                    td
+                      a(href='/Actors/#{actor.id}')= actor.last_name + ", " + actor.first_name 
+                    td
+                      = actor.gender
     .col-md-6
       !=template

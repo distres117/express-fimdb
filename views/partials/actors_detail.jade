@@ -1,0 +1,13 @@
+panel.panel-primary
+  .panel-heading Movies
+  .panel-body.target
+    table(class='table table-hover')
+      th Movie
+      th Year
+      tbody
+        each movie in data.movies
+          tr
+            td
+              a(href='/Movies/#{movie.id}?link=true')= movie.name
+            td
+              = movie.year
