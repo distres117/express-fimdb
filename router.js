@@ -43,17 +43,19 @@ router.route('/:type/:id')
     db.findById(req.type, Number(req.params.id), function(err,data){
       if (!err)
         res.render('partials/'+ req.type.toLowerCase() + '_detail', {data: data}, function(err,html){
-          // if (req.query.link){
             db.temp.store = data;
-          
-          res.render(req.type.toLowerCase(), {template: html, data: db.temp.store, showResults:true, id: Number(req.params.id)});
+            db.favs.get(function(favs){
+              res.render(req.type.toLowerCase(), {template: html, data: db.temp.store, showResults:true, id: Number(req.params.id), favs:favs });
+            });
+
+
       });
     });
 
   })
   .post(function(req,res){
     db.favs.set(req.type, Number(req.params.id), function(){
-      res.redirect('/' + req.type.toLowerCase() + '/' + req.params.id);
+      res.redirect('/' + req.type + '/' + req.params.id);
     });
   });
 
