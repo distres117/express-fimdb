@@ -12,19 +12,25 @@ block content
         button.btn.btn-default.pull-right(type='submit') Submit
   if showResults
     .col-md-6
-      if data.length > 1
-        .panel.panel-primary
-          .panel-heading Results
-          .panel-body.target
-            table(class='table table-hover')
-              th Name
-              th Gender
-              tbody
+      .panel.panel-primary
+        .panel-heading Results
+        .panel-body.target
+          table(class='table table-hover')
+            th Name
+            th Gender
+            tbody
+              if data.length > 1
                 each actor, index in data
                   tr(class=(actor.id === id ? "info": ""))
                     td
                       a(href='/Actors/#{actor.id}')= actor.last_name + ", " + actor.first_name 
                     td
                       = actor.gender
+              else
+                tr.info
+                  td
+                    =data.last_name + ", " + data.first_name
+                  td
+                    =data.gender
     .col-md-6
       !=template

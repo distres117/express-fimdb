@@ -1,4 +1,13 @@
-var temp;
+function DataStore(){
+  this.store = null;
+}
+
+DataStore.prototype.paginate=function(skip, limit){
+  return this.store.filter(function(it,i){
+    return (i > skip -1 && i < (skip +limit));
+  });
+};
+
 var Sequelize = require('sequelize'),
   sequelize = new Sequelize('database', null, null, {
     dialect: 'sqlite',
@@ -51,7 +60,18 @@ var Genres = sequelize.define('movies_genres', {
     primaryKey: true
   },
   genre: Sequelize.STRING
-})
+});
+
+var Favorites = sequelize.define('favorites', {
+  id:{
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  type: Sequelize.STRING,
+  name: Sequelize.STRING,
+  type_id: Sequelize.INTEGER
+});
+
 Movies.belongsToMany(Actors, {through: Roles, foreignKey: 'movie_id'});
 Actors.belongsToMany(Movies, {through: Roles, foreignKey: 'actor_id'});
 Movies.hasMany(Roles, {foreignKey: 'movie_id'});
@@ -103,14 +123,48 @@ function exists(name){
   return !!models[name];
 }
 
+var temp = new DataStore();
 
-module.exports = {findByAttr, findById, exists, temp};
+var favs = {
+  init: function(cb){
+    Favorites.sync().then(function(){
+      cb();
+    });
 
-//console.log(getOtherModels('Movies'));
-// findById('Actors', 347256, function(err,data){
-//   console.log(err || data);
+  },
+  destroy:function(cb){
+    Favorites.drop().then(function(){
+      cb();
+    });
+  },
+  get: function(cb){
+    Favorites.findAll().then(function(data){
+      cb(data);
+    });
+  },
+  set: function(type, id, cb){
+    findById(type, id, function(err,data){
+      Favorites.create({
+        type: type,
+        type_id: id,
+        name: data.name
+      })
+      .then(function(){
+        cb();
+      });
+    });
+  }
+};
+module.exports = {findByAttr, findById, exists, temp, favs};
+
+// console.log(getOtherModels('Movies'));
+// findById('Movies', 5000, function(err,data){
+//   console.log(data.name);
+//
 // });
 
-// findByAttr('Movies', {name: 'Braveheart'}, function(err,data){
-//   console.log(data[0].movies_genre.genre);
+// findByAttr('Actors', {first_name: 'Brad'}, function(err,data){
+//   //console.log(data[0].movies_genre.genre);
+//   temp.store = data;
+//   console.log(temp.paginate(25,10)[0].last_name);
 // } );

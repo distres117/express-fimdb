@@ -17,18 +17,20 @@ block content
                 option 
                   =i++
         button.btn.btn-default.pull-right(type='submit') Submit
+      if data && data.id
+        a.btn.btn-default.pull-right(href='/Movies/#{data.id}?method=post') Add to Favorites
   if showResults
     .col-md-6
-      if data.length > 0
-        .panel.panel-primary
-          .panel-heading Results
-          .panel-body.target
-            table(class='table table-hover')
-              th Title
-              th Year
-              th Genre
-              th Rank
-              tbody
+      .panel.panel-primary
+        .panel-heading Results
+        .panel-body.target
+          table(class='table table-hover')
+            th Title
+            th Year
+            th Genre
+            th Rank
+            tbody
+              if data.length > 0
                 each movie, index in data
                   tr(class=(movie.id === id ? "info": ""))
                     td
@@ -39,5 +41,16 @@ block content
                       = movie.movies_genres ? movie.movies_genre.genre : ""
                     td
                       = movie.rank
+              else
+                tr.info
+                  td
+                    = data.name
+                  td
+                    = data.year
+                  td
+                    = data.movies_genre ? data.movies_genre.genre : ''
+                  td
+                    =data.rank
+            //pager goes here
     .col-md-6
       !=template

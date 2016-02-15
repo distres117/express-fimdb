@@ -11,8 +11,18 @@ html
           a(href='/Movies') Movies
         li(class=(selected === "actors" ? "active" : ""))
           a(href='/Actors') Actors
-        li
-          a(href='#') Favorites
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown', preventDefault='true')
+            | Dropdown 
+            b.caret
+          ul.dropdown-menu
+            li
+              if favs
+                each fav in favs
+                  a(href='#')
+                    = fav.name
     .container
       block content
+    script(type='text/javascript', src='jquery/dist/jquery.js')
+    script(type='text/javascript', src='/bootstrap/dist/js/bootstrap.min.js')
       
