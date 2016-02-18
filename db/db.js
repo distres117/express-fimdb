@@ -65,7 +65,8 @@ var Genres = sequelize.define('movies_genres', {
 var Favorites = sequelize.define('favorites', {
   id:{
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   type: Sequelize.STRING,
   name: Sequelize.STRING,
@@ -153,6 +154,16 @@ var favs = {
         cb();
       });
     });
+  },
+  remove: function(id, cb){
+    Favorites.destroy({
+      where: {
+        type_id: id
+      }
+    })
+      .then(function(){
+        cb();
+      });
   }
 };
 module.exports = {findByAttr, findById, exists, temp, favs};

@@ -19,7 +19,7 @@ html
             li
               if favs
                 each fav in favs
-                  a(href='/Movies/#{fav.type_id}')
+                  a(href='/#{fav.type}/#{fav.type_id}?link=true')
                     = fav.name
     .container
       block content

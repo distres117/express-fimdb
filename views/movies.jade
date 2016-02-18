@@ -17,9 +17,12 @@ block content
                 option 
                   =i++
         button.btn.btn-default.pull-right(type='submit') Submit
-      - var movieInFavs = favs.map(i=>i.type_id).indexOf(data.id) > -1;
-      if data && data.id && !movieInFavs
-        a.btn.btn-default.pull-right(href='/Movies/#{data.id}?method=post') Add to Favorites
+      - var isArray = data && Array.isArray(data);
+      - var movieInFavs = favs && favs.map(i=>i.type_id).indexOf(id) > -1;
+      if path && !movieInFavs
+        a.btn.btn-default.pull-right(href='#{path}?method=post') Add to Favorites
+      if path && movieInFavs
+        a.btn.btn-default.pull-right(href='#{path}?method=delete') Remove from Favorites
   if showResults
     .col-md-6
       .panel.panel-primary
@@ -31,7 +34,7 @@ block content
             th Genre
             th Rank
             tbody
-              if data.length > 0
+              if isArray
                 each movie, index in data
                   tr(class=(movie.id === id ? "info": ""))
                     td
